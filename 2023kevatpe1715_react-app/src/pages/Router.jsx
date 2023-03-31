@@ -19,6 +19,9 @@ export const Router = () =>{
                     <li>
                         <Link to="/Items">Items</Link>
                     </li>
+                    <li>
+                        <Link to="/List">List</Link>
+                    </li>
                 </ul>  
             </div>
           <Outlet/>  
