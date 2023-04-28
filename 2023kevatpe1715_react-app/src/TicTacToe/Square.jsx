@@ -1,9 +1,10 @@
 import React from "react";
 
-export const Square =()=>{
+export const Square =(props)=>{
+    const classes = props.className?`${props.className} square` : 'square'; 
     return(
-        <div>
-            <h1>X</h1>
+        <div className={classes}>
+            X
         </div>
     );
 }
