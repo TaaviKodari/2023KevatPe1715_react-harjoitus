@@ -9,17 +9,27 @@ const initialBoard = ['','','','','','','','',''];
 export const TicTacToe =()=>{
     const[gameState, setGameState] = useState(initialBoard);
     const[isXTurn, setIsXTurn] = useState(true);
-    const [status, setStatus] = useState('');
+    const[status, setStatus] = useState('');
 
     useEffect(()=>{
         const winner = checkWinner();
         if(winner){
             setStatus(`Winner: ${winner}`);
+        }else if(!gameState.includes('')){
+            setStatus("It's a draw")
+        }else{
+            setStatus(`${isXTurn ? 'X' : 'O'}'s turn`);
         }
-    }, gameState)
+
+    }, [gameState])
 
     const onSquareClick = (index) =>{
         let strings = Array.from(gameState);
+
+        if(status.includes("Winner")){
+            return;
+        }
+
         if(strings[index] !== ''){
             return;
         }
@@ -55,7 +65,27 @@ export const TicTacToe =()=>{
             <div className="game">
                 <h1>TIC-TAC-TOE</h1>
                 <Board gameState={gameState} onSquareClick={onSquareClick}/>
-                {status}
+                
+                {!status.includes("Winner")&&(
+                    <>
+                        <span>{status}</span>
+                        <button onClick={()=>{
+                            setGameState(initialBoard);
+                            setIsXTurn(true);
+                        }}>Clear board</button>
+                    </>
+                )}
+                
+                {status.includes("Winner")&&(
+                    <>
+                        <span style={{color:"green"}}>{status}</span>
+                        <button style={{background: "lightgreen"}} onClick={()=>{
+                            setGameState(initialBoard);
+                            setIsXTurn(true);
+                        }}>Play again</button>
+                    </>
+                )}
+
             </div>
         </div>
     );
