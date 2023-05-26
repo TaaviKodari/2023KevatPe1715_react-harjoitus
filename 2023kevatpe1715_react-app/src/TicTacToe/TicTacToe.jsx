@@ -1,6 +1,10 @@
 import React from "react";
+
 import './TicTacToe.css';
+
 import { Board } from "./Board";
+import { Scoreboard } from "./Scoreboard";
+
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -10,6 +14,7 @@ export const TicTacToe =()=>{
     const[gameState, setGameState] = useState(initialBoard);
     const[isXTurn, setIsXTurn] = useState(true);
     const[status, setStatus] = useState('');
+    const[scores, setScores] = useState({xScore: 0, oScore: 0});
 
     useEffect(()=>{
         const winner = checkWinner();
@@ -22,6 +27,20 @@ export const TicTacToe =()=>{
         }
 
     }, [gameState])
+
+    useEffect(() =>{
+        const winner = checkWinner();
+        if(winner === null){
+            return;
+        }
+
+        if(winner === "X"){
+            setScores({xScore: scores.xScore +1, oScore: scores.oScore});
+        }else{
+            setScores({xScore: scores.xScore, oScore: scores.oScore +1});
+        }
+
+    }, [status])
 
     const onSquareClick = (index) =>{
         let strings = Array.from(gameState);
@@ -60,10 +79,18 @@ export const TicTacToe =()=>{
         return null;
     }
 
+    function clearScoreboard(){
+        setScores({xScore:0,oScore:0});
+        setGameState(initialBoard);
+        setIsXTurn(true);
+    }
+
     return(
         <div>
             <div className="game">
                 <h1>TIC-TAC-TOE</h1>
+                <Scoreboard scores ={scores}/>
+                <button onClick={clearScoreboard}>Clear scoreboard</button>
                 <Board gameState={gameState} onSquareClick={onSquareClick}/>
                 
                 {!status.includes("Winner")&&(
